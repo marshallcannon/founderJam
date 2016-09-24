@@ -34,6 +34,7 @@ var gameState = {
 
     //Instruments
     this.instA = new InstA();
+    this.instB = new InstB();
 
     //Physics Bounding Boxes
     this.boundingBoxes();
@@ -107,7 +108,7 @@ var gameState = {
               closestInstrument = checkSprite;
             else
             {
-              if(game.physics.arcade.distanceBetween(this.player, checkSprite) < game.physics.arcade.distaceBetween(this.player, closestInstrument))
+              if(game.physics.arcade.distanceBetween(this.player, checkSprite) < game.physics.arcade.distanceBetween(this.player, closestInstrument))
               {
                 closestInstrument = checkSprite;
               }

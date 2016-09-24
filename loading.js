@@ -8,6 +8,7 @@ var loadingState = {
 
     //Load Instruments
     game.load.image('instrument', 'assets/images/instrument.png');
+    game.load.image('instrument2', 'assets/images/instrument2.png');
 
   },
 

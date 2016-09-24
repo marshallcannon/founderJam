@@ -40,3 +40,10 @@ function InstA() {
 
 }
 InstA.prototype = Object.create(Instrument.prototype);
+
+function InstB() {
+
+  Instrument.call(this, 200, 400, 'instrument2');
+
+}
+InstB.prototype = Object.create(Instrument.prototype);
