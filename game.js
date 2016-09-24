@@ -37,6 +37,15 @@ var gameState = {
         this.p1.x++;
     }
 
+    if (pad2.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1)
+    {
+        this.p2.x--;
+    }
+    else if (pad2.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad2.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1)
+    {
+        this.p2.x++;
+    }
+
   },
 
   render: function() {
