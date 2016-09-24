@@ -96,17 +96,29 @@ var gameState = {
       //Pick Up
       if(!this.player.instrument)
       {
-        var closestInstrument = gameState.instrumentGroup.getAt(0);
-        for(var i = 1; i < gameState.instrumentGroup.length; i++)
+        var closestInstrument = null;
+        for(var i = 0; i < gameState.instrumentGroup.length; i++)
         {
           var checkSprite = gameState.instrumentGroup.getAt(i);
-          if(game.physics.arcade.distanceBetween(this.player, checkSprite) < game.physics.arcade.distaceBetween(this.player, closestInstrument))
+          //If the instrument isn't being held
+          if(checkSprite.body.enable)
           {
-            closestInstrument = checkSprite;
+            if(!closestInstrument)
+              closestInstrument = checkSprite;
+            else
+            {
+              if(game.physics.arcade.distanceBetween(this.player, checkSprite) < game.physics.arcade.distaceBetween(this.player, closestInstrument))
+              {
+                closestInstrument = checkSprite;
+              }
+            }
           }
         }
-        if(game.physics.arcade.distanceBetween(this.player, closestInstrument) < 100)
-          this.player.pickUp(closestInstrument);
+        if(closestInstrument)
+        {
+          if(game.physics.arcade.distanceBetween(this.player, closestInstrument) < 100)
+            this.player.pickUp(closestInstrument);
+        }
       }
       //Throw
       else
