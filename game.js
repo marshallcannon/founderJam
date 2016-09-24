@@ -13,6 +13,9 @@ var gameState = {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.physics.arcade.gravity.y = 500;
 
+    //Start Music
+    var music = game.add.audio('blueDanube');
+
     //Create Groups
     this.backgroundGroup = game.add.group();
     this.playerGroup = game.add.group();
