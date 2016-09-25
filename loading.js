@@ -4,14 +4,17 @@ var loadingState = {
 
     //Load Music
     game.load.audio('blueDanube', 'assets/music/blue_danube.ogg');
+    game.load.audio('kingtut', 'assets/music/kingtut.ogg');
 
     //Load Players
-    game.load.image('player1', 'assets/images/charLarge.png');
+    game.load.spritesheet('player1', 'assets/images/p1_base.png', 64, 64);
     game.load.image('player2', 'assets/images/charMed.png');
 
     //Load Instruments
-    game.load.image('instrument', 'assets/images/instrument.png');
-    game.load.image('instrument2', 'assets/images/instrument2.png');
+    game.load.image('tuba', 'assets/images/tuba.png');
+    game.load.image('guitar', 'assets/images/guitar.png');
+    game.load.image('flute', 'assets/images/flute.png');
+    game.load.image('keytar', 'assets/images/keytar.png');
 
     //Load Background
     game.load.image('theatre', 'assets/images/theatreBG.png');
@@ -28,6 +31,12 @@ var loadingState = {
     game.load.image('x', 'assets/images/xButton.png');
     game.load.image('y', 'assets/images/yButton.png');
 
+    //Load Font
+    game.load.bitmapFont('font', 'assets/font/font.png', 'assets/font/font.fnt');
+
+    //Load Effects
+    game.load.image('badBorder', 'assets/images/badBorder.png');
+
   },
 
   create: function() {
@@ -39,7 +48,7 @@ var loadingState = {
 
   update: function() {
 
-    if(game.cache.isSoundReady('blueDanube'))
+    if(game.cache.isSoundReady('blueDanube') && game.cache.isSoundReady('kingtut'))
       game.state.start('game');
 
   }

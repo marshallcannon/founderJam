@@ -1,13 +1,6 @@
-function Player(x, y, playerNumber) {
+function Player(x, y, image_base, image_arms) {
 
-  var image;
-  if(playerNumber === 1)
-    image = 'player1';
-  else {
-    image = 'player2';
-  }
-
-  Phaser.Sprite.call(this, game, x, y, image);
+  Phaser.Sprite.call(this, game, x, y, image_base);
 
   this.anchor.setTo(0.5, 0.5);
 
@@ -47,3 +40,15 @@ Player.prototype.throw = function(velocity) {
   }
 
 };
+
+function Player1(x, y) {
+
+  Player.call(this, x, y, 'player1', null);
+
+  this.animations.add('idle', [0,1], 4, true);
+  this.animations.add('run', [2,3,4,5,6,7,8,9], 8, true);
+
+  this.animations.play('idle');
+
+}
+Player1.prototype = Object.create(Player.prototype);

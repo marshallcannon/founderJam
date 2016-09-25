@@ -10,7 +10,6 @@ function Instrument(x, y, image, id) {
 
   game.physics.arcade.enable(this);
   this.body.enable = true;
-  this.body.velocity.setTo(200, 0);
   this.body.bounce.y = 0.2;
   this.body.bounce.x = 0.5;
   this.body.collideWorldBounds = true;
@@ -34,32 +33,34 @@ Instrument.prototype.friction = function() {
 };
 
 /*########################################################
-                    INSTRUMENT A
+                    INSTRUMENTS
 ########################################################*/
 function Tuba() {
 
-  Instrument.call(this, 100, 400, 'instrument', 1);
+  Instrument.call(this, 100, 400, 'tuba', 1);
 
 }
 Tuba.prototype = Object.create(Instrument.prototype);
 
 function Guitar() {
 
-  Instrument.call(this, 200, 400, 'instrument2', 2);
+  Instrument.call(this, 200, 400, 'guitar', 2);
 
 }
 Guitar.prototype = Object.create(Instrument.prototype);
 
 function Flute() {
 
-  Instrument.call(this, 300, 400, 'instrument2', 3);
+  Instrument.call(this, 300, 400, 'flute', 3);
+
+  this.angle = -45;
 
 }
 Flute.prototype = Object.create(Instrument.prototype);
 
 function Keytar() {
 
-  Instrument.call(this, 400, 400, 'instrument2', 4);
+  Instrument.call(this, 400, 400, 'keytar', 4);
 
 }
 Keytar.prototype = Object.create(Instrument.prototype);

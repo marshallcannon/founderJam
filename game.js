@@ -17,6 +17,9 @@ var gameState = {
     this.songDanube = game.add.audio('blueDanube');
     this.songDanube.speed = 2.66;
 
+    this.songKingTut = game.add.audio('kingtut');
+    this.songKingTut.speed = 3.33;
+
     //Create Groups
     this.backgroundGroup = game.add.group();
     this.playerGroup = game.add.group();
@@ -29,6 +32,7 @@ var gameState = {
     this.noteIconGroup = game.add.group();
     this.foregroundGroup = game.add.group();
     this.effectsGroup = game.add.group();
+    this.uiGroup = game.add.group();
 
     //Detail Tracks
     this.track1.xCheck = 135; this.track1.widthCheck = 70;
@@ -41,7 +45,7 @@ var gameState = {
     this.foregroundGroup.add(game.make.sprite(0, 0, 'theatreFG'));
 
     //Players
-    this.p1 = this.playerGroup.add(new Player(250, 430, 1));
+    this.p1 = this.playerGroup.add(new Player1(250, 470));
     this.p2 = this.playerGroup.add(new Player(350, 440, 2));
 
     //Start Controllers
@@ -56,6 +60,8 @@ var gameState = {
     //Instruments
     this.tuba = new Tuba();
     this.guitar = new Guitar();
+    this.flute = new Flute();
+    this.keytar = new Keytar();
 
     //Physics Bounding Boxes
     this.boundingBoxes();
@@ -65,8 +71,21 @@ var gameState = {
     this.noteFrameGroup.add(game.make.sprite(300, 325, 'tileFrame')).anchor.setTo(0.5, 0.5);
     this.noteFrameGroup.add(game.make.sprite(432, 325, 'tileFrame')).anchor.setTo(0.5, 0.5);
 
+    //Score
+    this.score = 0;
+    this.scoreText = game.add.bitmapText(440, 575, 'font', this.score.toString());
+    this.scoreText.anchor.setTo(1, 1);
+    this.scoreText.scale.setTo(1.25, 1.25);
+    this.pointsText = game.add.bitmapText(450, 575, 'font', 'points');
+    this.pointsText.anchor.setTo(0, 1);
+    this.pointsText.scale.setTo(0.75, 0.75);
+
+    //Effects
+    this.badBorder = this.effectsGroup.add(game.make.sprite(0, 0, 'badBorder'));
+    this.badBorder.alpha = 0;
+
     //Start Music
-    this.startSong(this.songDanube, beatMaps.danube);
+    this.startSong(this.songKingTut, beatMaps.kingtut);
 
   },
 
@@ -79,6 +98,8 @@ var gameState = {
     //Collision
     game.physics.arcade.collide(this.instrumentGroup, this.boundingBoxGroup);
     game.physics.arcade.collide(this.instrumentGroup);
+
+    this.scoreText.text = this.score.toString();
 
   },
 
@@ -127,18 +148,29 @@ var gameState = {
     //Move Left
     if (controller.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1)
     {
+      player.scale.x = -1;
       if(player.x - player.width/2 > 66)
+      {
         player.x += controller.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X)*4;
+        player.animations.play('run');
+      }
       else
         player.x = 66 + player.width/2;
     }
     //Move Right
     else if (controller.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1)
     {
+      player.scale.x = 1;
       if(player.x + player.width/2 < 534)
+      {
         player.x += controller.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X)*4;
+        player.animations.play('run');
+      }
       else
         player.x = 534 - player.width/2;
+    }
+    else {
+      player.animations.play('idle');
     }
 
   },
@@ -251,7 +283,7 @@ var gameState = {
     if(checkNote)
     {
       //If it's in range to be played
-      var accuracy = Math.abs(325 - checkNote.body.y);
+      var accuracy = Math.abs(325 - checkNote.y);
       if(accuracy < 15)
       {
         //If you're holding the right instrument
@@ -260,7 +292,6 @@ var gameState = {
           //If the player hit the right button
           if(checkNote.buttonNumber === button)
           {
-            console.log(accuracy);
             checkNote.succeed(accuracy);
           }
           else

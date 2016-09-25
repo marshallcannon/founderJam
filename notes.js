@@ -59,9 +59,15 @@ Note.prototype.succeed = function(accuracy) {
   this.destroy();
 
   if(accuracy <= 6)
+  {
     gameState.bloom(this.x, 'gold');
+    gameState.score += 10;
+  }
   else
+  {
     gameState.bloom(this.x, 'white');
+    gameState.score += 5;
+  }
 
 };
 
@@ -69,5 +75,8 @@ Note.prototype.fail = function() {
 
   this.button.destroy();
   this.destroy();
+
+  gameState.badBorder.alpha = 1;
+  game.add.tween(gameState.badBorder).to( { alpha: 0 }, 500, "Linear", true);
 
 };
