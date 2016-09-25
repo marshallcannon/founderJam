@@ -37,21 +37,21 @@ Instrument.prototype.friction = function() {
 ########################################################*/
 function Tuba() {
 
-  Instrument.call(this, 100, 400, 'tuba', 1);
+  Instrument.call(this, 150, 400, 'tuba', 1);
 
 }
 Tuba.prototype = Object.create(Instrument.prototype);
 
 function Guitar() {
 
-  Instrument.call(this, 200, 400, 'guitar', 2);
+  Instrument.call(this, 250, 400, 'guitar', 2);
 
 }
 Guitar.prototype = Object.create(Instrument.prototype);
 
 function Flute() {
 
-  Instrument.call(this, 300, 400, 'flute', 3);
+  Instrument.call(this, 350, 400, 'flute', 3);
 
   this.angle = -45;
 
@@ -60,7 +60,7 @@ Flute.prototype = Object.create(Instrument.prototype);
 
 function Keytar() {
 
-  Instrument.call(this, 400, 400, 'keytar', 4);
+  Instrument.call(this, 450, 400, 'keytar', 4);
 
 }
 Keytar.prototype = Object.create(Instrument.prototype);

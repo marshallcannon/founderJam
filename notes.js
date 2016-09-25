@@ -16,7 +16,7 @@ function Note(songSpeed, track, instrument, button, time) {
 
   this.speed = songSpeed * 25;
 
-  y = 325 - (time * this.speed) / 1000;
+  y = 391 - (time * this.speed) / 1000;
 
   //Run Sprite Constructor
   Phaser.Sprite.call(this, game, x, y, tile);
@@ -27,7 +27,7 @@ function Note(songSpeed, track, instrument, button, time) {
   this.body.velocity.y = this.speed;
 
   //Create Button Sprite
-  this.button = gameState.noteIconGroup.add(game.make.sprite(this.x, this.y, button));
+  this.button = gameState.noteIconGroup.add(game.make.sprite(this.x-13, this.y, button));
   this.button.anchor.setTo(0.5, 0.5);
 
   //Save button value as number
@@ -43,10 +43,10 @@ Note.prototype.update = function() {
 
   if(this.button)
   {
-      this.button.y = this.y;
+      this.button.y = this.y+2;
   }
 
-  if(this.y > 325 + 15)
+  if(this.y > 391 + 15)
   {
     this.fail();
   }
@@ -78,5 +78,6 @@ Note.prototype.fail = function() {
 
   gameState.badBorder.alpha = 1;
   game.add.tween(gameState.badBorder).to( { alpha: 0 }, 500, "Linear", true);
+  game.camera.shake(0.01, 100);
 
 };

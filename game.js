@@ -45,17 +45,18 @@ var gameState = {
     this.foregroundGroup.add(game.make.sprite(0, 0, 'theatreFG'));
 
     //Players
-    this.p1 = this.playerGroup.add(new Player1(250, 470));
-    this.p2 = this.playerGroup.add(new Player(350, 440, 2));
+    this.p1 = this.playerGroup.add(new Player1(250, 465));
+    this.playerGroup.add(this.p1.arms);
+    this.p2 = this.playerGroup.add(new Player2(350, 475));
+    this.playerGroup.add(this.p2.arms);
 
-    //Start Controllers
-    game.input.gamepad.start();
-    pad1 = game.input.gamepad.pad1;
-    pad1.onDownCallback = this.handleButtonPress;
+    //Link Controllers to Players
     pad1.player = this.p1;
-    pad2 = game.input.gamepad.pad2;
-    pad2.onDownCallback = this.handleButtonPress;
     pad2.player = this.p2;
+
+    //Update Button Handlers
+    pad1.onDownCallback = this.handleButtonPress;
+    pad2.onDownCallback = this.handleButtonPress;
 
     //Instruments
     this.tuba = new Tuba();
@@ -67,9 +68,9 @@ var gameState = {
     this.boundingBoxes();
 
     //Note Frames
-    this.noteFrameGroup.add(game.make.sprite(168, 325, 'tileFrame')).anchor.setTo(0.5, 0.5);
-    this.noteFrameGroup.add(game.make.sprite(300, 325, 'tileFrame')).anchor.setTo(0.5, 0.5);
-    this.noteFrameGroup.add(game.make.sprite(432, 325, 'tileFrame')).anchor.setTo(0.5, 0.5);
+    // this.noteFrameGroup.add(game.make.sprite(168, 391, 'tileFrame')).anchor.setTo(0.5, 0.5);
+    // this.noteFrameGroup.add(game.make.sprite(300, 391, 'tileFrame')).anchor.setTo(0.5, 0.5);
+    // this.noteFrameGroup.add(game.make.sprite(432, 391, 'tileFrame')).anchor.setTo(0.5, 0.5);
 
     //Score
     this.score = 0;
@@ -84,8 +85,9 @@ var gameState = {
     this.badBorder = this.effectsGroup.add(game.make.sprite(0, 0, 'badBorder'));
     this.badBorder.alpha = 0;
 
-    //Start Music
-    this.startSong(this.songKingTut, beatMaps.kingtut);
+    game.camera.flash('0x000000', 1000);
+    game.camera.onFlashComplete.removeAll();
+    game.camera.onFlashComplete.add(function() {this.startSong(this.songKingTut, beatMaps.kingtut);}, this);
 
   },
 
@@ -149,28 +151,36 @@ var gameState = {
     if (controller.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1)
     {
       player.scale.x = -1;
-      if(player.x - player.width/2 > 66)
+      player.arms.scale.x = -1;
+      if(player.x + player.width/2 > 66)
       {
         player.x += controller.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X)*4;
         player.animations.play('run');
+        if(!player.instrument)
+          player.arms.animations.play('run');
       }
       else
-        player.x = 66 + player.width/2;
+        player.x = 66 - player.width/2;
     }
     //Move Right
     else if (controller.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1)
     {
       player.scale.x = 1;
+      player.arms.scale.x = 1;
       if(player.x + player.width/2 < 534)
       {
         player.x += controller.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X)*4;
         player.animations.play('run');
+        if(!player.instrument)
+          player.arms.animations.play('run');
       }
       else
         player.x = 534 - player.width/2;
     }
     else {
       player.animations.play('idle');
+      if(!player.instrument)
+        player.arms.animations.play('idle');
     }
 
   },
@@ -283,7 +293,7 @@ var gameState = {
     if(checkNote)
     {
       //If it's in range to be played
-      var accuracy = Math.abs(325 - checkNote.y);
+      var accuracy = Math.abs(391 - checkNote.y);
       if(accuracy < 15)
       {
         //If you're holding the right instrument
@@ -315,7 +325,7 @@ var gameState = {
     if(color === 'gold') {bloomColor = '0xf4f274';}
     else {bloomColor = '0xFFFFFF';}
 
-    var bloom = game.add.graphics(x-35, 312.5, gameState.effectsGroup);
+    var bloom = game.add.graphics(x-35, 391-12.5, gameState.effectsGroup);
     bloom.beginFill(bloomColor, 1);
     bloom.drawRect(0, 0, 70, 25);
     bloom.endFill();
