@@ -28,11 +28,12 @@ var gameState = {
     this.track3 = game.add.group();
     this.noteIconGroup = game.add.group();
     this.foregroundGroup = game.add.group();
+    this.effectsGroup = game.add.group();
 
     //Detail Tracks
-    this.track1.x = 135; this.track1.width = 70;
-    this.track2.x = 265; this.track2.width = 70;
-    this.track3.x = 395; this.track3.width = 70;
+    this.track1.xCheck = 135; this.track1.widthCheck = 70;
+    this.track2.xCheck = 265; this.track2.widthCheck = 70;
+    this.track3.xCheck = 395; this.track3.widthCheck = 70;
 
     //Background
     this.backgroundGroup.add(game.make.sprite(0, 0, 'theatre'));
@@ -53,16 +54,16 @@ var gameState = {
     pad2.player = this.p2;
 
     //Instruments
-    this.instA = new InstA();
-    this.instB = new InstB();
+    this.tuba = new Tuba();
+    this.guitar = new Guitar();
 
     //Physics Bounding Boxes
     this.boundingBoxes();
 
     //Note Frames
-    this.noteFrameGroup.add(game.make.sprite(170, 325, 'tileFrame')).anchor.setTo(0.5, 0.5);
+    this.noteFrameGroup.add(game.make.sprite(168, 325, 'tileFrame')).anchor.setTo(0.5, 0.5);
     this.noteFrameGroup.add(game.make.sprite(300, 325, 'tileFrame')).anchor.setTo(0.5, 0.5);
-    this.noteFrameGroup.add(game.make.sprite(430, 325, 'tileFrame')).anchor.setTo(0.5, 0.5);
+    this.noteFrameGroup.add(game.make.sprite(432, 325, 'tileFrame')).anchor.setTo(0.5, 0.5);
 
     //Start Music
     this.startSong(this.songDanube, beatMaps.danube);
@@ -71,9 +72,9 @@ var gameState = {
 
   update: function() {
 
-    //Take Input from Controllers
-    this.controllerInput(pad1, this.p1);
-    this.controllerInput(pad2, this.p2);
+    //Move with Joysticks on Controllers
+    this.analogInput(pad1, this.p1);
+    this.analogInput(pad2, this.p2);
 
     //Collision
     game.physics.arcade.collide(this.instrumentGroup, this.boundingBoxGroup);
@@ -89,13 +90,17 @@ var gameState = {
     //   game.debug.geom(new Phaser.Rectangle(body.x, body.y, body.width, body.height), 'rgba(255,255,0,1)');
     // }
 
-    game.debug.text(game.time.fps, 25, 25);
-
-    game.debug.text('Controller 1: ' + pad1.connected, 25, 50);
-    game.debug.text('Controller 2: ' + pad2.connected, 25, 75);
-
-    game.debug.text(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X), 25, 100);
-    game.debug.text(pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X), 25, 125);
+    // game.debug.text(game.time.fps, 25, 25);
+    //
+    // game.debug.text('Controller 1: ' + pad1.connected, 25, 50);
+    // game.debug.text('Controller 2: ' + pad2.connected, 25, 75);
+    //
+    // game.debug.text(pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X), 25, 100);
+    // game.debug.text(pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X), 25, 125);
+    //
+    // game.debug.pixel(120, 325, 'rgba(255,255,255,1)');
+    // game.debug.pixel(120, 319, 'rgba(255,0,0,1)');
+    // game.debug.pixel(120, 331, 'rgba(255,0,0,1)');
 
   },
 
@@ -104,7 +109,12 @@ var gameState = {
     //Create Notes
     for(var i = 0; i < beatMap.length; i++)
     {
-      this.noteGroup.add(new Note(song.speed, beatMap[i][0], beatMap[i][1], beatMap[i][2], beatMap[i][3]));
+      if(beatMap[i][0] === 1)
+        gameState.track1.add(new Note(song.speed, beatMap[i][0], beatMap[i][1], beatMap[i][2], beatMap[i][3]));
+      if(beatMap[i][0] === 2)
+        gameState.track2.add(new Note(song.speed, beatMap[i][0], beatMap[i][1], beatMap[i][2], beatMap[i][3]));
+      if(beatMap[i][0] === 3)
+        gameState.track3.add(new Note(song.speed, beatMap[i][0], beatMap[i][1], beatMap[i][2], beatMap[i][3]));
     }
 
     //Play Song
@@ -112,7 +122,7 @@ var gameState = {
 
   },
 
-  controllerInput: function(controller, player) {
+  analogInput: function(controller, player) {
 
     //Move Left
     if (controller.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1)
@@ -175,6 +185,29 @@ var gameState = {
       }
     }
 
+    //Colorful Buttons
+    if(button === 0 || button === 1 || button === 2 || button === 3)
+    {
+      if(this.player.instrument)
+      {
+        //Track 1
+        if(this.player.x > gameState.track1.xCheck && this.player.x < gameState.track1.xCheck + gameState.track1.widthCheck)
+        {
+          gameState.playNote(gameState.track1, button, this.player);
+        }
+        //Track 2
+        else if(this.player.x > gameState.track2.xCheck && this.player.x < gameState.track2.xCheck + gameState.track2.widthCheck)
+        {
+          gameState.playNote(gameState.track2, button, this.player);
+        }
+        //Track 3
+        else if(this.player.x > gameState.track3.xCheck && this.player.x < gameState.track3.xCheck + gameState.track3.widthCheck)
+        {
+          gameState.playNote(gameState.track3, button, this.player);
+        }
+      }
+    }
+
   },
 
   boundingBoxes: function() {
@@ -198,6 +231,68 @@ var gameState = {
     box.body.setSize(500, 100);
     box.body.immovable = true;
     box.body.allowGravity = false;
+
+  },
+
+  playNote: function(track, button, player) {
+
+    //Find Lowest Note
+    var checkNote;
+    for(var i = 0; i < track.length; i++)
+    {
+      if(!checkNote)
+        checkNote = track.getAt(i);
+      else {
+        if(track.getAt(i).body.y > checkNote.body.y)
+          checkNote = track.getAt(i);
+      }
+    }
+
+    if(checkNote)
+    {
+      //If it's in range to be played
+      var accuracy = Math.abs(325 - checkNote.body.y);
+      if(accuracy < 15)
+      {
+        //If you're holding the right instrument
+        if(checkNote.instrument === player.instrument.id)
+        {
+          //If the player hit the right button
+          if(checkNote.buttonNumber === button)
+          {
+            console.log(accuracy);
+            checkNote.succeed(accuracy);
+          }
+          else
+          {
+            checkNote.fail();
+          }
+        }
+        else {
+          console.log('Wrong Instrument');
+        }
+      }
+      else {
+        //PLAY BAD NOISE
+      }
+    }
+
+  },
+
+  bloom: function(x, color) {
+
+    if(color === 'gold') {bloomColor = '0xf4f274';}
+    else {bloomColor = '0xFFFFFF';}
+
+    var bloom = game.add.graphics(x-35, 312.5, gameState.effectsGroup);
+    bloom.beginFill(bloomColor, 1);
+    bloom.drawRect(0, 0, 70, 25);
+    bloom.endFill();
+
+    game.add.tween(bloom).to( { alpha: 0 }, 1000, "Linear", true);
+    game.time.events.add(1000, function() {
+      bloom.destroy();
+    }, this);
 
   }
 

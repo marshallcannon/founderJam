@@ -4,9 +4,9 @@ function Note(songSpeed, track, instrument, button, time) {
   var y;
   var tile;
 
-  if(track === 1) {x = 170; gameState.track1.add(this);}
-  else if(track === 2) {x = 300; gameState.track2.add(this);}
-  else if(track === 3) {x = 430; gameState.track3.add(this);}
+  if(track === 1) {x = 168;}
+  else if(track === 2) {x = 300;}
+  else if(track === 3) {x = 432;}
 
   if(instrument === 1) {tile = 'tile1';}
   else if(instrument === 2) {tile = 'tile2';}
@@ -30,6 +30,12 @@ function Note(songSpeed, track, instrument, button, time) {
   this.button = gameState.noteIconGroup.add(game.make.sprite(this.x, this.y, button));
   this.button.anchor.setTo(0.5, 0.5);
 
+  //Save button value as number
+  if(button === 'a') {this.buttonNumber = 0;}
+  else if(button === 'b') {this.buttonNumber = 1;}
+  else if(button === 'x') {this.buttonNumber = 2;}
+  else if(button === 'y') {this.buttonNumber = 3;}
+
 }
 Note.prototype = Object.create(Phaser.Sprite.prototype);
 
@@ -39,5 +45,29 @@ Note.prototype.update = function() {
   {
       this.button.y = this.y;
   }
+
+  if(this.y > 325 + 15)
+  {
+    this.fail();
+  }
+
+};
+
+Note.prototype.succeed = function(accuracy) {
+
+  this.button.destroy();
+  this.destroy();
+
+  if(accuracy <= 6)
+    gameState.bloom(this.x, 'gold');
+  else
+    gameState.bloom(this.x, 'white');
+
+};
+
+Note.prototype.fail = function() {
+
+  this.button.destroy();
+  this.destroy();
 
 };
