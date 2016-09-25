@@ -1,7 +1,7 @@
 /*########################################################
                     PARENT INSTRUMENT
 ########################################################*/
-function Instrument(x, y, image) {
+function Instrument(x, y, image, id) {
 
   Phaser.Sprite.call(this, game, x, y, image);
   gameState.instrumentGroup.add(this);
@@ -17,6 +17,8 @@ function Instrument(x, y, image) {
   this.body.onCollide = new Phaser.Signal();
   this.body.onCollide.add(this.friction, this);
 
+  this.id = id;
+
 }
 Instrument.prototype = Object.create(Phaser.Sprite.prototype);
 
@@ -26,7 +28,7 @@ Instrument.prototype.update = function() {
 
 Instrument.prototype.friction = function() {
 
-  if(this.body.velocity.y < 2 && this.body.velocity.y > -2)
+  if(this.body.velocity.y < 5 && this.body.velocity.y > -5)
     this.body.velocity.x *= 0.9;
 
 };
@@ -34,16 +36,30 @@ Instrument.prototype.friction = function() {
 /*########################################################
                     INSTRUMENT A
 ########################################################*/
-function InstA() {
+function Tuba() {
 
-  Instrument.call(this, 100, 400, 'instrument');
-
-}
-InstA.prototype = Object.create(Instrument.prototype);
-
-function InstB() {
-
-  Instrument.call(this, 200, 400, 'instrument2');
+  Instrument.call(this, 100, 400, 'instrument', 1);
 
 }
-InstB.prototype = Object.create(Instrument.prototype);
+Tuba.prototype = Object.create(Instrument.prototype);
+
+function Guitar() {
+
+  Instrument.call(this, 200, 400, 'instrument2', 2);
+
+}
+Guitar.prototype = Object.create(Instrument.prototype);
+
+function Flute() {
+
+  Instrument.call(this, 300, 400, 'instrument2', 3);
+
+}
+Flute.prototype = Object.create(Instrument.prototype);
+
+function Keytar() {
+
+  Instrument.call(this, 400, 400, 'instrument2', 4);
+
+}
+Keytar.prototype = Object.create(Instrument.prototype);

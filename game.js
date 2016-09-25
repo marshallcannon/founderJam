@@ -13,18 +13,35 @@ var gameState = {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.physics.arcade.gravity.y = 500;
 
-    //Start Music
-    var music = game.add.audio('blueDanube');
+    //Create Song Objects
+    this.songDanube = game.add.audio('blueDanube');
+    this.songDanube.speed = 2.66;
 
     //Create Groups
     this.backgroundGroup = game.add.group();
     this.playerGroup = game.add.group();
     this.instrumentGroup = game.add.group();
     this.boundingBoxGroup = game.add.group();
+    this.noteFrameGroup = game.add.group();
+    this.track1 = game.add.group();
+    this.track2 = game.add.group();
+    this.track3 = game.add.group();
+    this.noteIconGroup = game.add.group();
+    this.foregroundGroup = game.add.group();
+
+    //Detail Tracks
+    this.track1.x = 135; this.track1.width = 70;
+    this.track2.x = 265; this.track2.width = 70;
+    this.track3.x = 395; this.track3.width = 70;
+
+    //Background
+    this.backgroundGroup.add(game.make.sprite(0, 0, 'theatre'));
+    //Foreground
+    this.foregroundGroup.add(game.make.sprite(0, 0, 'theatreFG'));
 
     //Players
-    this.p1 = this.playerGroup.add(new Player(250, 510, 1));
-    this.p2 = this.playerGroup.add(new Player(350, 520, 2));
+    this.p1 = this.playerGroup.add(new Player(250, 430, 1));
+    this.p2 = this.playerGroup.add(new Player(350, 440, 2));
 
     //Start Controllers
     game.input.gamepad.start();
@@ -42,6 +59,14 @@ var gameState = {
     //Physics Bounding Boxes
     this.boundingBoxes();
 
+    //Note Frames
+    this.noteFrameGroup.add(game.make.sprite(170, 325, 'tileFrame')).anchor.setTo(0.5, 0.5);
+    this.noteFrameGroup.add(game.make.sprite(300, 325, 'tileFrame')).anchor.setTo(0.5, 0.5);
+    this.noteFrameGroup.add(game.make.sprite(430, 325, 'tileFrame')).anchor.setTo(0.5, 0.5);
+
+    //Start Music
+    this.startSong(this.songDanube, beatMaps.danube);
+
   },
 
   update: function() {
@@ -52,16 +77,17 @@ var gameState = {
 
     //Collision
     game.physics.arcade.collide(this.instrumentGroup, this.boundingBoxGroup);
+    game.physics.arcade.collide(this.instrumentGroup);
 
   },
 
   render: function() {
 
-    for(var i = 0; i < this.boundingBoxGroup.length; i++)
-    {
-      var body = this.boundingBoxGroup.getAt(i).body;
-      game.debug.geom(new Phaser.Rectangle(body.x, body.y, body.width, body.height), 'rgba(255,255,0,1)');
-    }
+    // for(var i = 0; i < this.boundingBoxGroup.length; i++)
+    // {
+    //   var body = this.boundingBoxGroup.getAt(i).body;
+    //   game.debug.geom(new Phaser.Rectangle(body.x, body.y, body.width, body.height), 'rgba(255,255,0,1)');
+    // }
 
     game.debug.text(game.time.fps, 25, 25);
 
@@ -73,7 +99,16 @@ var gameState = {
 
   },
 
-  startLevel: function() {
+  startSong: function(song, beatMap) {
+
+    //Create Notes
+    for(var i = 0; i < beatMap.length; i++)
+    {
+      this.noteGroup.add(new Note(song.speed, beatMap[i][0], beatMap[i][1], beatMap[i][2], beatMap[i][3]));
+    }
+
+    //Play Song
+    song.play();
 
   },
 
@@ -82,12 +117,18 @@ var gameState = {
     //Move Left
     if (controller.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1)
     {
+      if(player.x - player.width/2 > 66)
         player.x += controller.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X)*4;
+      else
+        player.x = 66 + player.width/2;
     }
     //Move Right
     else if (controller.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1)
     {
+      if(player.x + player.width/2 < 534)
         player.x += controller.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X)*4;
+      else
+        player.x = 534 - player.width/2;
     }
 
   },
@@ -129,7 +170,7 @@ var gameState = {
       {
         var velocity = new Phaser.Point();
         velocity.x = this.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) * 500;
-        velocity.y = this.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) * 500;
+        velocity.y = this.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) * 300;
         this.player.throw(velocity);
       }
     }
@@ -142,19 +183,19 @@ var gameState = {
 
     box = this.boundingBoxGroup.add(game.make.sprite(0, 0, null));
     game.physics.arcade.enable(box);
-    box.body.setSize(50, 600);
+    box.body.setSize(66, 600);
     box.body.immovable = true;
     box.body.allowGravity = false;
 
-    box = this.boundingBoxGroup.add(game.make.sprite(550, 0, null));
+    box = this.boundingBoxGroup.add(game.make.sprite(534, 0, null));
     game.physics.arcade.enable(box);
-    box.body.setSize(50, 600);
+    box.body.setSize(66, 600);
     box.body.immovable = true;
     box.body.allowGravity = false;
 
-    box = this.boundingBoxGroup.add(game.make.sprite(50, 575, null));
+    box = this.boundingBoxGroup.add(game.make.sprite(50, 500, null));
     game.physics.arcade.enable(box);
-    box.body.setSize(500, 25);
+    box.body.setSize(500, 100);
     box.body.immovable = true;
     box.body.allowGravity = false;
 
