@@ -13,13 +13,6 @@ var gameState = {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.physics.arcade.gravity.y = 500;
 
-    //Create Song Objects
-    this.songDanube = game.add.audio('blueDanube');
-    this.songDanube.speed = 2.66;
-
-    this.songKingTut = game.add.audio('kingtut');
-    this.songKingTut.speed = 3.33;
-
     //Create Groups
     this.backgroundGroup = game.add.group();
     this.playerGroup = game.add.group();
@@ -87,7 +80,14 @@ var gameState = {
 
     game.camera.flash('0x000000', 1000);
     game.camera.onFlashComplete.removeAll();
-    game.camera.onFlashComplete.add(function() {this.startSong(this.songKingTut, beatMaps.kingtut);}, this);
+    game.camera.onFlashComplete.add(function() {this.startSong(game.currentSong.song, game.currentSong.beatMap);}, this);
+
+    //Drummer
+    var drummer = game.add.sprite(75, 550, 'drummer');
+    drummer.anchor.setTo(0.5, 0.5);
+    drummer.animations.add('play', [0,1], 3, true);
+    drummer.animations.play('play');
+
 
   },
 
@@ -247,6 +247,7 @@ var gameState = {
         {
           gameState.playNote(gameState.track3, button, this.player);
         }
+        game.add.existing(new MusicParticle(this.player.x, this.player.y-32));
       }
     }
 

@@ -11,6 +11,8 @@ var loadingState = {
     //Load Music
     game.load.audio('blueDanube', 'assets/music/blue_danube.ogg');
     game.load.audio('kingtut', 'assets/music/kingtut.ogg');
+    game.load.audio('communiclique', 'assets/music/noname.ogg');
+    game.load.audio('crash', 'assets/music/crash.ogg');
 
     //Load Players
     game.load.spritesheet('player1', 'assets/images/p1_base.png', 64, 64);
@@ -48,6 +50,15 @@ var loadingState = {
     game.load.spritesheet('menuButtons', 'assets/images/A-BUTTON-MENU.png', 80, 80);
     game.load.image('menuChar1', 'assets/images/MENU-CHAR-1.png');
     game.load.image('menuChar2', 'assets/images/MENU-CHAR-2.png');
+    game.load.image('arrowLeft', 'assets/images/Arrow-Left.png');
+    game.load.image('arrowRight', 'assets/images/Arrow-Right.png');
+    game.load.image('title', 'assets/images/title.png');
+
+    //load Particles
+    game.load.spritesheet('musicParticles', 'assets/images/Notes-24x24.png', 24, 24);
+
+    //Load Drummer
+    game.load.spritesheet('drummer', 'assets/images/drummer.png', 116, 88);
 
   },
 
@@ -66,7 +77,7 @@ var loadingState = {
 
   update: function() {
 
-    if(game.cache.isSoundReady('blueDanube') && game.cache.isSoundReady('kingtut'))
+    if(game.cache.isSoundReady('blueDanube') && game.cache.isSoundReady('kingtut') && game.cache.isSoundReady('communiclique'))
       game.state.start('menu');
 
   }
