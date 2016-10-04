@@ -190,41 +190,52 @@ var gameState = {
     //Right Trigger
     if(button === Phaser.Gamepad.XBOX360_RIGHT_TRIGGER)
     {
-      //Pick Up
-      if(!this.player.instrument)
+
+      //Try to pick up instrument
+      var checkInstrument;
+      var closestInstrument;
+      var distNew;
+      var distOld;
+      for(var i = 0; i < gameState.instrumentGroup.length; i++)
       {
-        var closestInstrument = null;
-        for(var i = 0; i < gameState.instrumentGroup.length; i++)
+        checkInstrument = gameState.instrumentGroup.getAt(i);
+        distNew = game.physics.arcade.distanceBetween(this.player, checkInstrument);
+
+        //If the instrument isn't currently being held
+        if(checkInstrument.body.enable)
         {
-          var checkSprite = gameState.instrumentGroup.getAt(i);
-          //If the instrument isn't being held
-          if(checkSprite.body.enable)
+          if(distNew < this.player.pickUpDistance)
           {
-            if(!closestInstrument)
-              closestInstrument = checkSprite;
-            else
+            if(closestInstrument)
             {
-              if(game.physics.arcade.distanceBetween(this.player, checkSprite) < game.physics.arcade.distanceBetween(this.player, closestInstrument))
+              if(distNew < distOld)
               {
-                closestInstrument = checkSprite;
+                closestInstrument = checkInstrument;
               }
+            }
+            else {
+              closestInstrument = checkInstrument;
             }
           }
         }
-        if(closestInstrument)
-        {
-          if(game.physics.arcade.distanceBetween(this.player, closestInstrument) < 100)
-            this.player.pickUp(closestInstrument);
-        }
       }
-      //Throw
-      else
+
+      //Throw current instrument
+      if(this.player.instrument)
       {
         var velocity = new Phaser.Point();
         velocity.x = this.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) * 500;
         velocity.y = this.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) * 300;
         this.player.throw(velocity);
       }
+
+      //Pick up new instrument
+      if(closestInstrument)
+      {
+        this.player.pickUp(closestInstrument);
+      }
+
+
     }
 
     //Colorful Buttons

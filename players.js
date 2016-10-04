@@ -19,6 +19,8 @@ function Player(x, y, image_base, image_arms) {
 }
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 
+Player.prototype.pickUpDistance = 50;
+
 Player.prototype.update = function() {
 
   this.arms.x = this.x;
