@@ -19,6 +19,10 @@ var loadingState = {
     game.load.spritesheet('player1_arms', 'assets/images/p1_arms.png', 64, 64);
     game.load.spritesheet('player2', 'assets/images/p2_base.png', 64, 64);
     game.load.spritesheet('player2_arms', 'assets/images/p2_arms.png', 64, 64);
+    game.load.spritesheet('player3', 'assets/images/p3_base.png', 64, 64);
+    game.load.spritesheet('player3_arms', 'assets/images/p3_arms.png', 64, 64);
+    game.load.spritesheet('player4', 'assets/images/p4_base.png', 64, 64);
+    game.load.spritesheet('player4_arms', 'assets/images/p4_arms.png', 64, 64);
 
     //Load Instruments
     game.load.image('tuba', 'assets/images/tuba.png');

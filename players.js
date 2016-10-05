@@ -67,6 +67,10 @@ Player.prototype.throw = function(velocity) {
 
 };
 
+/*#############################################################
+                    SPECIFIC PLAYERS
+############################################################*/
+
 function Player1(x, y) {
 
   Player.call(this, x, y, 'player1', 'player1_arms');
@@ -90,3 +94,27 @@ function Player2(x, y) {
 
 }
 Player2.prototype = Object.create(Player.prototype);
+
+function Player3(x, y) {
+
+  Player.call(this, x, y, 'player3', 'player3_arms');
+
+  this.animations.add('idle', [0,1], 4, true);
+  this.animations.add('run', [2,3,4,5,6,7,8,9], 8, true);
+
+  this.animations.play('idle');
+
+}
+Player3.prototype = Object.create(Player.prototype);
+
+function Player4(x, y) {
+
+  Player.call(this, x, y, 'player4', 'player4_arms');
+
+  this.animations.add('idle', [0,1], 4, true);
+  this.animations.add('run', [2,3,4,5,6,7,8,9], 8, true);
+
+  this.animations.play('idle');
+
+}
+Player4.prototype = Object.create(Player.prototype);

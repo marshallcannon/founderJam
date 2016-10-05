@@ -38,18 +38,26 @@ var gameState = {
     this.foregroundGroup.add(game.make.sprite(0, 0, 'theatreFG'));
 
     //Players
-    this.p1 = this.playerGroup.add(new Player1(250, 465));
+    this.p1 = this.playerGroup.add(new Player1(250, 455));
     this.playerGroup.add(this.p1.arms);
-    this.p2 = this.playerGroup.add(new Player2(350, 475));
+    this.p2 = this.playerGroup.add(new Player2(300, 465));
     this.playerGroup.add(this.p2.arms);
+    this.p3 = this.playerGroup.add(new Player3(350, 475));
+    this.playerGroup.add(this.p3.arms);
+    this.p4 = this.playerGroup.add(new Player4(340, 485));
+    this.playerGroup.add(this.p4.arms);
 
     //Link Controllers to Players
     pad1.player = this.p1;
     pad2.player = this.p2;
+    pad3.player = this.p3;
+    pad4.player = this.p4;
 
     //Update Button Handlers
     pad1.onDownCallback = this.handleButtonPress;
     pad2.onDownCallback = this.handleButtonPress;
+    pad3.onDownCallback = this.handleButtonPress;
+    pad4.onDownCallback = this.handleButtonPress;
 
     //Instruments
     this.tuba = new Tuba();
@@ -96,6 +104,8 @@ var gameState = {
     //Move with Joysticks on Controllers
     this.analogInput(pad1, this.p1);
     this.analogInput(pad2, this.p2);
+    this.analogInput(pad3, this.p3);
+    this.analogInput(pad4, this.p4);
 
     //Collision
     game.physics.arcade.collide(this.instrumentGroup, this.boundingBoxGroup);

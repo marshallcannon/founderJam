@@ -54,6 +54,8 @@ var menuState = {
     game.input.gamepad.start();
     pad1 = game.input.gamepad.pad1;
     pad2 = game.input.gamepad.pad2;
+    pad3 = game.input.gamepad.pad3;
+    pad4 = game.input.gamepad.pad4;
 
     this.starting = false;
     this.analogPressed = false;
